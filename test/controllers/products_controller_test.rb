@@ -1,55 +1,66 @@
+#---
+# Excerpted from "Agile Web Development with Rails",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit http://www.pragmaticprogrammer.com/titles/rails4 for more book information.
+#---
 require 'test_helper'
-
-class ProductsControllerTest < ActionDispatch::IntegrationTest
+class ProductsControllerTest < ActionController::TestCase
   setup do
     @product = products(:one)
-    @update  = {
-      title: 'newArreg',
-      description: 'aFGSETWRJRYEDJRGVBYKURI',
-      image_url: 'lorem.jpg',
-      price:       1923.2
-
+    @update = {
+      title:       'Lorem Ipsum',
+      description: 'Wibbles are fun!',
+      image_url:   'lorem.jpg',
+      price:       19.95
     }
   end
 
   test "should get index" do
-    get products_url
+    get :index
     assert_response :success
+    assert_not_nil assigns(:products)
   end
 
   test "should get new" do
-    get new_product_url
+    get :new
     assert_response :success
   end
 
   test "should create product" do
     assert_difference('Product.count') do
-     post :create, product: @update
+      post :create, product: @update
     end
 
-    assert_redirected_to product_url(Product.last)
+    assert_redirected_to product_path(assigns(:product))
   end
 
+  # ...
+
   test "should show product" do
-    get product_url(@product)
+    get :show, id: @product
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_product_url(@product)
+    get :edit, id: @product
     assert_response :success
   end
 
   test "should update product" do
     patch :update, id: @product, product: @update
-    assert_redirected_to product_url(@product)
+    assert_redirected_to product_path(assigns(:product))
   end
+
+  # ...
 
   test "should destroy product" do
     assert_difference('Product.count', -1) do
-      delete product_url(@product)
+      delete :destroy, id: @product
     end
 
-    assert_redirected_to products_url
+    assert_redirected_to products_path
   end
 end
